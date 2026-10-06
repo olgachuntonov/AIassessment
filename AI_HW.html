@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הערכה ולמידה בעידן ה-AI | המרכז לקידום הלמידה וההוראה</title>
+    <style>
+        :root {
+            --primary-color: #003b5c;
+            --secondary-color: #0076a8;
+            --accent-color: #e0f2fe;
+            --text-color: #333;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --intro-bg: #eaf4fc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* עיצוב לתפריט הבחירה החדש */
+        .filter-container {
+            max-width: 450px;
+            margin: 0 auto 30px auto;
+            position: relative;
+            text-align: right;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 12px 20px 12px 40px; /* ריווח שמאלי עבור החץ */
+            font-size: 1.1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+            background-color: white;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            /* חץ מותאם אישית לתפריט גלילה */
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23003b5c" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: left 15px center; 
+            font-family: inherit;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0,118,168,0.2);
+            border-color: var(--secondary-color);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .intro-section {
+            background-color: var(--intro-bg);
+            border-right: 5px solid var(--primary-color);
+            padding: 25px 35px;
+            margin: 2rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .intro-section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+        
+        .intro-section p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .intro-recommendation {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #d1e5f5;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-top: 5px solid var(--secondary-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .card-content {
+            flex-grow: 1;
+        }
+
+        .tag-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        ul {
+            padding-right: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            grid-column: 1 / -1;
+            display: none;
+            padding: 40px;
+            background: #fff;
+            border-radius: 8px;
+        }
+        
+        .border-blue { border-top-color: #007bff !important; }
+        .border-green { border-top-color: #28a745 !important; }
+        .border-orange { border-top-color: #fd7e14 !important; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>תכנון והערכת מטלות בעידן ה-AI</h1>
+        <p class="subtitle">קווים מנחים וסל פתרונות לסגל ההוראה בטכניון</p>
+    </header>
+
+    <main>
+        <!-- Intro Section -->
+        <section class="intro-section">
+            <h2>האתגר: למה אנחנו צריכים שינוי?</h2>
+            <p>
+                קלות השימוש בכלי בינה מלאכותית, החיסכון בזמן וקבלת תוצרים ברמה גבוהה מפתים את הסטודנטים להסתמך עליהם לחלוטין לביצוע מטלות. הדבר מייצר שורת אתגרים אקדמיים: אשליית למידה והבנה שטחית של החומר, פגיעה ביכולת לנתח ולחשוב באופן עצמאי, וסכנת טעויות עקב נתונים שגויים ("הזיות"). בנוסף, חל כרסום במקוריות העבודות, פער בבניית מיומנויות הנדרשות להשתלבות בעולם העבודה האמיתי, ובזבוז משאבים של סגל ההוראה הנאלץ לבדוק תוצרי מכונה במקום ללוות תהליכי חשיבה אנושיים. 
+            </p>
+            <p>
+                עם זאת, הפתרון אינו טמון באיסור על שימוש בכלים אלו, אלא במינון נכון, הכוונה לדרך השימוש, ועדכון שיטות ההערכה. 
+            </p>
+            <p class="intro-recommendation">
+                המלצה לצוותי ההוראה: אתר זה נועד לשמש כארגז כלים יישומי עבורכם בתכנון הלמידה לסמסטר הקרוב. אנו ממליצים לסקור את הקווים המנחים, להשתמש ברשימת הסינון מטה כדי למצוא פתרונות המותאמים אישית לצרכי הקורס שלכם, ולבחור משימות ואסטרטגיות שישתלבו באופן היעיל והנכון ביותר במערך ההוראה שלכם.
+            </p>
+        </section>
+
+        <!-- Dropdown Filter -->
+        <div class="filter-container">
+            <label for="categorySelect" class="filter-label">סנן פתרונות לפי נושא:</label>
+            <select id="categorySelect" class="filter-select" onchange="filterCards()">
+                <option value="all">הצג הכל</option>
+                <option value="principles">עקרונות הערכה ומדיניות (המודל)</option>
+                <option value="viva">הערכה בעל-פה</option>
+                <option value="homework">התאמות במטלות בית כמותיות וקוד</option>
+                <option value="critique">ביקורת עמיתים וחשיבה ביקורתית</option>
+                <option value="cbl">למידה מבוססת מציאות (CBL)</option>
+                <option value="inclass">משימות כיתה ובחני פתע</option>
+                <option value="innovation">חדשנות, התאמה אישית וכלים מתקדמים</option>
+                <option value="prompts">ספריית פרומפטים לסטודנטים</option>
+            </select>
+        </div>
+
+        <!-- Cards Container -->
+        <div class="grid-container" id="cardsContainer">
+            <div class="no-results" id="noResultsMsg">לא נמצאו פתרונות בקטגוריה זו.</div>
+
+            <!-- Card 1 -->
+            <div class="card border-green" data-category="principles">
+                <div class="card-content">
+                    <h3>מודל חסינות ל-AI בעריכת מטלות</h3>
+                    <p>הפתרון לשילוב מושכל ושינוי שיטות ההערכה מתבסס על שילוב של פתרונות מהקטגוריות הבאות:</p>
+                    <ul>
+                        <li><strong>אימות ויעילות (כחול):</strong> מניעת אשליית הלמידה ואימות הפנמת הסטודנט.</li>
+                        <li><strong>תהליך וחשיבה (ירוק):</strong> מניעת הבנה שטחית ופיתוח יכולת ניתוח והעמקה.</li>
+                        <li><strong>מקוריות ושטח (כתום):</strong> מגשר על הפער במיומנויות עבודה ומביא לידי ביטוי סגנון אישי.</li>
+                    </ul>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">עקרונות הערכה</span>
+                    <span class="tag">מדיניות</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card border-blue" data-category="viva">
+                <div class="card-content">
+                    <h3>הערכה בעל-פה</h3>
+                    <p>בדיקה קצרה המאפשרת לוודא הבנה שוטפת, המבוססת על רמת ההבנה ולא על זיכרון.</p>
+                    <ul>
+                        <li><strong>שיעורי בית:</strong> ראיונות של 3-5 דקות. שאלות מומלצות: "למה בחרת בנוסחה הזו?" או "אם היית מקבל תוצאה אחרת, איפה היית מחפש את הטעות?".</li>
+                        <li><strong>דוחות מעבדה:</strong> דרישה להסביר חריגות במדידה ברמה הפיזיקלית, או לנתח את מקור השגיאה במערכת המדידה.</li>
+                        <li><strong>פרויקטים:</strong> שאלות על התמודדות עם קשיים, הסבר פנימי על רכיב, ואלטרנטיבות למקרים של מגבלות תקציב וזמן.</li>
+                    </ul>
+                    <p><em>טיפ:</em> יצירת מרחב בטוח ושימוש במחוון מונעים מהערכה זו להפוך למלחיצה.</p>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">הערכה בעל פה</span>
+                    <span class="tag">שיעורי בית</span>
+                    <span class="tag">מעבדה</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card border-orange" data-category="homework">
+                <div class="card-content">
+                    <h3>התאמות במטלות בית קיימות</h3>
+                    <p>שימור מסורת הקורס תוך הוספת רכיב עומק למטלות הניתנות לפתרון ישיר על ידי AI:</p>
+                    <ul>
+                        <li><strong>חשיבה מערכתית:</strong> מעבר מפתרון טכני לבחינת הבעיה כשלם (למשל, הבנת רשת יחסי הגומלין במערכת ביולוגית).</li>
+                        <li><strong>תרגילים כמותיים וקוד:</strong> דרישה מהסטודנט לזהות תנאי כשל, לנתח רגישות, לבצע הכללה לפרמטר כללי, ולהגדיר בדיקות קצה.</li>
+                        <li><strong>קישוריות פנימית וחיצונית:</strong> בניית סעיפים התלויים בהחלטות מסעיפים קודמים, וחיבור ישיר של המטלה לדיון ספציפי שנערך בכיתה.</li>
+                        <li><strong>מרכיב יצירתי או מקורי:</strong> הוספת דרישה המעודדת ביטוי אישי, כגון ניסוח אנלוגיה ייחודית, יצירת סקיצה חזותית לפתרון הבעיה, או יישום מודל הנדסי/מתמטי על תחביב מחיי היומיום של הסטודנט.</li>
+                    </ul>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">מתמטיקה ופיזיקה</span>
+                    <span class="tag">תכנות</span>
+                    <span class="tag">שדרוג מטלות</span>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="card border-green" data-category="critique">
+                <div class="card-content">
+                    <h3>הפיכת AI ל"אובייקט לביקורת"</h3>
+                    <p>שימוש בכלים תוך דרישה לבקרה ושיפוט אנושי:</p>
+                    <ul>
+                        <li><strong>ביקורת קוד:</strong> ה-AI כותב שלד לקוד, אך הסטודנט מחויב להוסיף הערות מפורטות המסבירות כל שורה והחלטה תכנונית.</li>
+                        <li><strong>איתור שגיאות:</strong> הסטודנטים מבקשים מה-AI פתרון ונדרשים לאתר, לתקן ולנמק לפחות 3 שגיאות או "הזיות", בגיבוי ספרות.</li>
+                        <li><strong>פתיחת ה"קופסה השחורה":</strong> קבלת תוצאה סופית מה-AI והטלת החובה על הסטודנט לכתוב ידנית את שלבי הביניים וההנחות המובלעות.</li>
+                    </ul>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">ביקורת עמיתים</span>
+                    <span class="tag">חשיבה מסדר גבוה</span>
+                    <span class="tag">סינתזה</span>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="card border-orange" data-category="cbl">
+                <div class="card-content">
+                    <h3>למידה מבוססת מציאות (CBL)</h3>
+                    <p>שימוש ב-AI כעוזר מחקר לגישור הפער מול התעשייה:</p>
+                    <ul>
+                        <li><strong>אילוצי תעשייה (Open-ended):</strong> תכנון מטלות סביב בעיות הדורשות פשרה או אופטימיזציה מול אילוצים כמו תקציב, בלאי ורגולציה.</li>
+                        <li><strong>אוריינות נתונים ועקיפת AI:</strong> עבודה עם דאטה גולמי, תמונות מיקרוסקופ או נתונים מהמחקר האישי של המרצה, ודרישה לנתח חריגות שהכלי מתקשה לזהות.</li>
+                        <li><strong>סימולציית תפקיד:</strong> דרישה למענה פרקטי מנקודת מבט של מנהלת פיתוח המציבה דרישות קצה.</li>
+                    </ul>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">CBL</span>
+                    <span class="tag">תעשייה</span>
+                    <span class="tag">אוריינות נתונים</span>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="card border-blue" data-category="inclass">
+                <div class="card-content">
+                    <h3>משימות כיתה ובחני פתע</h3>
+                    <p>מתן ערך מוסף לנוכחות ולמידה פעילה בכיתה כרשת ביטחון:</p>
+                    <ul>
+                        <li><strong>בוחן קצר בכיתה:</strong> ווידוא הכנה ולקיחת אחריות אישית, שיכול להתבצע לאחר מתן משימת הכנה בבית או בסיום דיון כיתתי.</li>
+                        <li><strong>מבחן אימות (Two-Stage):</strong> מטלת בית שנעשית בעזרת AI, ולאחריה בוחן קצרצר בכיתה המבוסס ישירות על אותן שאלות כדי לאמת הפנמה.</li>
+                        <li><strong>ניהול דיבייט:</strong> קבוצה אחת מייצגת עמדה שנוצרה בעזרת כלי AI, וקבוצה שנייה מאתגרת אותה באמצעות חשיבה ביקורתית אנושית.</li>
+                    </ul>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">נוכחות בכיתה</span>
+                    <span class="tag">בחנים</span>
+                    <span class="tag">למידה פעילה</span>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="card" data-category="innovation">
+                <div class="card-content">
+                    <h3>💡 חדשנות: הערכת התהליך והתאמה אישית</h3>
+                    <p>רעיונות מתקדמים לניצול חיובי של הטכנולוגיה בקורסים:</p>
+                    <ul>
+                        <li><strong>התאמת משימות למאפייני הסטודנט:</strong> שימוש ב-AI כ"עוזר הוראה" ליצירת וריאציות של המטלה לפי רקע הסטודנט, סגנון הלמידה שלו ורמתו (באמצעות הזנת נתונים אנונימיים מסקר מקדים).</li>
+                        <li><strong>הערכת יומן שיחות:</strong> הסטודנטים מגישים את "יומן השיחות" שלהם עם המכונה. ההערכה ניתנת על איכות הדיאלוג, זיהוי השגיאות והיכולת לדייק מונחים מקצועיים עד לקבלת התוצר.</li>
+                        <li><strong>ה-AI כחונך (Tutor):</strong> במטלות הכנה, הסטודנט מעלה חומר קריאה ל-AI ומנחה אותו לפעול כחונך השואל אותו שאלות הבנה מדורגות, ללא מתן סיכום מוכן מראש.</li>
+                    </ul>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">התאמה אישית</span>
+                    <span class="tag">כלים מתקדמים</span>
+                    <span class="tag">חדשנות</span>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="card" data-category="prompts">
+                <div class="card-content">
+                    <h3>ספריית פרומפטים מומלצים לסטודנטים</h3>
+                    <p>הכוונה לשימוש מבוקר בכלי AI לצורך פתרון בעיות באופן עצמאי:</p>
+                    <ul>
+                        <li><strong>פרומפט חילוץ מתקיעות:</strong> "אני מנסה לפתור את הבעיה... עד כה עשיתי את השלבים הבאים... אל תפתור את המשך השאלה, תן לי רמז נקודתי היכן שגיתי.".</li>
+                        <li><strong>פרומפט התנעת חשיבה:</strong> "הנה הנתונים של השאלה... אל תחשב את המספרים במקומי! תאר לי רק את שלבי העבודה התיאורטיים.".</li>
+                        <li><strong>בדיקת כיוון (מבנה):</strong> "לפני שאני מציב נתונים... להבנתי, תנאי הכשל קשור ל-X, ולכן עלי להשוות ל-Y. האם האסטרטגיה הזו נכונה?".</li>
+                    </ul>
+                </div>
+                <div class="tag-container">
+                    <span class="tag">פרומפטים</span>
+                    <span class="tag">הוראות לסטודנטים</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // פונקציית סינון המבוססת על תפריט הבחירה החדש
+        function filterCards() {
+            const selectElement = document.getElementById('categorySelect');
+            const selectedCategory = selectElement.value;
+            
+            const cardsContainer = document.getElementById('cardsContainer');
+            const cards = cardsContainer.getElementsByClassName('card');
+            let hasResults = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                // שולף את הקטגוריה שהגדרנו לכרטיסייה
+                const cardCategory = card.getAttribute('data-category');
+                
+                // אם בחרנו "הכל" או שהקטגוריה תואמת - נציג
+                if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+                    card.style.display = "flex";
+                    hasResults = true;
+                } else {
+                    card.style.display = "none";
+                }
+            }
+
+            // הודעה במקרה שלא נמצאו כרטיסיות
+            const noResultsMsg = document.getElementById('noResultsMsg');
+            if (hasResults) {
+                noResultsMsg.style.display = "none";
+            } else {
+                noResultsMsg.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
